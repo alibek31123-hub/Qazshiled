@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ТОО «ҚазМұнайҚызмет» — ANTI-DRONE SYSTEMS | Республика Казахстан</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        kmk: {
+                            bg: '#0a0f1c',
+                            surface: '#111827',
+                            card: '#131c2e',
+                            border: '#1e293b',
+                            cyan: '#00e5ff',
+                            amber: '#f59e0b',
+                            gold: '#eab308',
+                            danger: '#ef4444',
+                            success: '#10b981'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0a0f1c;
+            color: #f1f5f9;
+            background-image: 
+                linear-gradient(to right, rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+            background-size: 44px 44px;
+            overflow-x: hidden;
+        }
+
+        /* Тактические уголковые рамки HUD */
+        .hud-box {
+            position: relative;
+        }
+        .hud-box::before,
+        .hud-box::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-color: rgba(0, 229, 255, 0.55);
+            border-style: solid;
+            pointer-events: none;
+            transition: all 0.25s ease;
+        }
+        .hud-box::before {
+            top: -1px;
+            left: -1px;
+            border-width: 2px 0 0 2px;
+        }
+        .hud-box::after {
+            bottom: -1px;
+            right: -1px;
+            border-width: 0 2px 2px 0;
+        }
+        .hud-box:hover::before,
+        .hud-box:hover::after {
+            width: 18px;
+            height: 18px;
+            border-color: #f59e0b;
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 22px rgba(0, 229, 255, 0.22);
+        }
+        .glow-amber {
+            box-shadow: 0 0 22px rgba(245, 158, 11, 0.22);
+        }
+        .text-glow-cyan {
+            text-shadow: 0 0 14px rgba(0, 229, 255, 0.45);
+        }
+
+        /* Скроллбар */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0f1c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00e5ff;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-kmk-cyan selection:text-kmk-bg">
+
+    <!-- ШАПКА САЙТА (HEADER) -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-kmk-bg/90 backdrop-blur-md border-b border-slate-800/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Логотип ТОО «ҚазМұнайҚызмет» -->
+                <a href="#" class="flex items-center gap-3.5 group">
+                    <div class="w-11 h-11 rounded-lg bg-gradient-to-br from-kmk-cyan/20 to-amber-500/10 border border-kmk-cyan/50 flex items-center justify-center group-hover:border-kmk-amber transition-all">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-kmk-cyan group-hover:text-kmk-amber transition-colors"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-extrabold text-base sm:text-lg tracking-tight text-white leading-tight">
+                            ТОО «ҚазМұнайҚызмет»
+                        </span>
+                        <span class="text-[10px] font-mono tracking-[0.22em] text-kmk-cyan uppercase">
+                            ANTI-DRONE SYSTEMS // РК
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Навигация (Desktop) -->
+                <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-300">
+                    <a href="#about" class="hover:text-kmk-cyan transition-colors">О компании</a>
+                    <a href="#sectors" class="hover:text-kmk-cyan transition-colors">Отрасли</a>
+                    <a href="#catalog" class="hover:text-kmk-cyan transition-colors flex items-center gap-1.5">
+                        <span>Каталог оборудования</span>
+                        <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-kmk-cyan border border-slate-700">32</span>
+                    </a>
+                    <a href="#services" class="hover:text-kmk-cyan transition-colors">Услуги</a>
+                    <a href="#localization" class="hover:text-kmk-cyan transition-colors">Локализация</a>
+                    <a href="#request-section" class="hover:text-kmk-cyan transition-colors">Запрос КП</a>
+                </nav>
+
+                <!-- Правая кнопка: Спецификация / Заявка -->
+                <div class="flex items-center gap-3">
+                    <button onclick="openSpecDrawer()" class="relative px-4 py-2.5 rounded-lg bg-kmk-card border border-kmk-cyan/50 hover:border-kmk-amber text-white text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 glow-cyan">
+                        <i data-lucide="clipboard-list" class="w-4 h-4 text-kmk-cyan"></i>
+                        <span class="hidden sm:inline">Спецификация КП</span>
+                        <span class="sm:hidden">КП</span>
+                        <span id="spec-badge-count" class="ml-1 px-2 py-0.5 rounded-full bg-kmk-amber text-kmk-bg font-mono font-bold text-xs">0</span>
+                    </button>
+
+                    <button id="mobile-menu-toggle" class="lg:hidden p-2.5 rounded-lg bg-kmk-card border border-slate-800 text-slate-300 hover:text-kmk-cyan">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Мобильное меню -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-kmk-surface border-b border-slate-800 px-4 pt-3 pb-6 space-y-2.5">
+            <a href="#about" class="mobile-nav-link block py-2 text-sm text-slate-300 hover:text-kmk-cyan">О компании</a>
+            <a href="#sectors" class="mobile-nav-link block py-2 text-sm text-slate-300 hover:text-kmk-cyan">Где применяются решения</a>
+            <a href="#catalog" class="mobile-nav-link block py-2 text-sm font-semibold text-kmk-cyan">Каталог оборудования (32 модели)</a>
+            <a href="#services" class="mobile-nav-link block py-2 text-sm text-slate-300 hover:text-kmk-cyan">Что мы обеспечиваем (7 этапов)</a>
+            <a href="#localization" class="mobile-nav-link block py-2 text-sm text-slate-300 hover:text-kmk-cyan">Поэтапная локализация в РК</a>
+            <a href="#request-section" class="mobile-nav-link block py-2 text-sm text-slate-300 hover:text-kmk-cyan">Запрос коммерческого предложения</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="about" class="relative pt-32 pb-20 lg:pt-40 lg:pb-24 overflow-hidden">
+        <!-- Фоновое тактическое свечение -->
+        <div class="absolute top-20 right-1/4 w-[520px] h-[520px] bg-kmk-cyan/10 rounded-full blur-[130px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-10 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[110px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Левая текстовая колонка -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded bg-kmk-card border border-kmk-cyan/40 font-mono text-xs text-kmk-cyan">
+                        <span class="w-2 h-2 rounded-full bg-kmk-cyan animate-ping"></span>
+                        <span>ПРОМЫШЛЕННАЯ БЕЗОПАСНОСТЬ // РЕСПУБЛИКА КАЗАХСТАН</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-[52px] font-extrabold text-white leading-[1.12] tracking-tight">
+                        Системы противодействия БПЛА для <span class="text-transparent bg-clip-text bg-gradient-to-r from-kmk-cyan via-cyan-300 to-kmk-amber text-glow-cyan">нефтегазовой и промышленной</span> инфраструктуры
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
+                        <strong class="text-white">ТОО «ҚазМұнайҚызмет»</strong> осуществляет деятельность в сфере промышленной безопасности и является официальным поставщиком и дистрибьютором современных комплексов <span class="text-kmk-cyan font-medium">Anti-Drone</span> на территории Республики Казахстан.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#catalog" class="px-7 py-4 rounded-lg bg-kmk-cyan text-kmk-bg font-bold text-sm sm:text-base hover:bg-cyan-300 transition-all flex items-center justify-center gap-2.5 glow-cyan">
+                            <i data-lucide="layers" class="w-5 h-5"></i>
+                            <span>Открыть каталог (32 системы)</span>
+                        </a>
+                        <a href="#request-section" class="px-7 py-4 rounded-lg bg-kmk-card border border-slate-700 hover:border-kmk-amber text-white font-semibold text-sm sm:text-base transition-all flex items-center justify-center gap-2.5">
+                            <i data-lucide="file-check-2" class="w-5 h-5 text-kmk-amber"></i>
+                            <span>Запросить аудит объекта</span>
+                        </a>
+                    </div>
+
+                    <!-- Ключевые показатели каталога -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-6 border-t border-slate-800/80">
+                        <div class="hud-box bg-kmk-card/80 p-3.5 rounded border border-slate-800">
+                            <div class="font-mono text-xl sm:text-2xl font-bold text-kmk-cyan">32+</div>
+                            <div class="text-xs text-slate-400 mt-1">Модели систем в каталоге</div>
+                        </div>
+                        <div class="hud-box bg-kmk-card/80 p-3.5 rounded border border-slate-800">
+                            <div class="font-mono text-xl sm:text-2xl font-bold text-white">до 21 км</div>
+                            <div class="text-xs text-slate-400 mt-1">Оптико-тепловиз. контроль</div>
+                        </div>
+                        <div class="hud-box bg-kmk-card/80 p-3.5 rounded border border-slate-800">
+                            <div class="font-mono text-xl sm:text-2xl font-bold text-kmk-amber">до 5 км</div>
+                            <div class="text-xs text-slate-400 mt-1">Дальность подавления БПЛА</div>
+                        </div>
+                        <div class="hud-box bg-kmk-card/80 p-3.5 rounded border border-slate-800">
+                            <div class="font-mono text-xl sm:text-2xl font-bold text-emerald-400">до 30 км</div>
+                            <div class="text-xs text-slate-400 mt-1">Навигационный спуфинг</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правая колонка: Интерактивный тактический монитор охраны периметра объекта -->
+                <div class="lg:col-span-5">
+                    <div class="hud-box bg-kmk-card/95 border border-slate-700/90 rounded-xl p-5 shadow-2xl">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4 font-mono text-xs">
+                            <div class="flex items-center gap-2 text-kmk-cyan">
+                                <i data-lucide="radar" class="w-4 h-4"></i>
+                                <span>ПЕРИМЕТР ОБЪЕКТА // СВЯЗКА «1+N»</span>
+                            </div>
+                            <span id="hero-radar-status" class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">ЗАЩИТА АКТИВНА</span>
+                        </div>
+
+                        <!-- Интерактивный Canvas радара -->
+                        <div id="hero-radar-wrapper" class="w-full max-w-[360px] aspect-square mx-auto relative">
+                            <canvas id="perimeterRadarCanvas" class="w-full h-full rounded-full cursor-pointer"></canvas>
+                        </div>
+
+                        <!-- Кнопки управления демонстрацией -->
+                        <div class="mt-4 pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
+                            <div class="text-slate-400">
+                                РЕЖИМ: <span id="radar-mode-label" class="text-white font-semibold">АВТО-ПЕРЕХВАТ (KAZ-01P + DD-E)</span>
+                            </div>
+                            <button id="btn-test-intrusion" class="px-3 py-1.5 rounded bg-kmk-amber/15 border border-kmk-amber/50 text-kmk-amber hover:bg-kmk-amber hover:text-kmk-bg font-semibold transition-all">
+                                + Имитация цели
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ГДЕ ПРИМЕНЯЮТСЯ РЕШЕНИЯ (ОТРАСЛИ) -->
+    <section id="sectors" class="py-20 bg-kmk-surface/60 border-y border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <div class="font-mono text-xs text-kmk-amber uppercase tracking-widest mb-2">// ОБЪЕКТЫ ПРИМЕНЕНИЯ В РК</div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">Где применяются решения</h2>
+                </div>
+                <p class="text-sm text-slate-400 max-w-md">
+                    Комплексная защита воздушного пространства предприятий непрерывного цикла, добывающих комплексов и транспортных артерий.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Отрасль 1 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl hover:border-kmk-cyan/60 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-kmk-cyan/10 border border-kmk-cyan/30 flex items-center justify-center text-kmk-cyan mb-5 group-hover:bg-kmk-cyan group-hover:text-kmk-bg transition-all">
+                        <i data-lucide="flame" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Нефтегазовая отрасль</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Нефтяные и газовые месторождения, НПЗ, резервуарные парки, компрессорные станции и магистральные трубопроводы.
+                    </p>
+                </div>
+
+                <!-- Отрасль 2 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl hover:border-kmk-amber/60 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-kmk-amber/10 border border-kmk-amber/30 flex items-center justify-center text-kmk-amber mb-5 group-hover:bg-kmk-amber group-hover:text-kmk-bg transition-all">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Энергетика</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        ТЭЦ, ГРЭС, ГЭС, высоковольтные подстанции, распределительные узлы и объекты альтернативной генерации.
+                    </p>
+                </div>
+
+                <!-- Отрасль 3 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl hover:border-kmk-cyan/60 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-kmk-cyan/10 border border-kmk-cyan/30 flex items-center justify-center text-kmk-cyan mb-5 group-hover:bg-kmk-cyan group-hover:text-kmk-bg transition-all">
+                        <i data-lucide="container" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Логистика</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Транспортно-логистические хабы, железнодорожные узлы, морские порты, терминалы хранения и автоколонны.
+                    </p>
+                </div>
+
+                <!-- Отрасль 4 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl hover:border-kmk-amber/60 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-kmk-amber/10 border border-kmk-amber/30 flex items-center justify-center text-kmk-amber mb-5 group-hover:bg-kmk-amber group-hover:text-kmk-bg transition-all">
+                        <i data-lucide="building-2" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Промышленная и критически важная инфраструктура</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Аэропорты, государственные границы, водохранилища, горно-обогатительные комбинаты и городская безопасность.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОЛНЫЙ ИНТЕРАКТИВНЫЙ КАТАЛОГ ОБОРУДОВАНИЯ (32 МОДЕЛИ) -->
+    <section id="catalog" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Заголовок каталога -->
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-6">
+                <div>
+                    <div class="font-mono text-xs text-kmk-cyan uppercase tracking-widest mb-2">// ПОЛНЫЙ ПЕРЕЧЕНЬ ПОСТАВЛЯЕМЫХ СИСТЕМ</div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">Каталог оборудования Anti-Drone</h2>
+                </div>
+                <div class="font-mono text-xs text-slate-400 bg-kmk-card border border-slate-800 px-4 py-2.5 rounded-lg">
+                    Найдено моделей: <span id="catalog-visible-count" class="text-kmk-cyan font-bold text-sm">32</span> из 32
+                </div>
+            </div>
+
+            <!-- Панель поиска и фильтров -->
+            <div class="bg-kmk-card border border-slate-800 rounded-xl p-4 sm:p-5 mb-8 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                    <!-- Поиск по названию / частотам / функциям -->
+                    <div class="md:col-span-6 relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input id="catalog-search" type="text" placeholder="Поиск по индексу (KAZ-01P, DF-03, DD-E21), частотам или назначению..." class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-kmk-bg border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-kmk-cyan transition-colors">
+                    </div>
+
+                    <!-- Фильтр по функционалу -->
+                    <div class="md:col-span-3">
+                        <select id="function-filter" class="w-full px-3.5 py-2.5 rounded-lg bg-kmk-bg border border-slate-700 text-sm text-slate-200 focus:outline-none focus:border-kmk-cyan">
+                            <option value="all">Все функции (Обнаружение / РЭБ)</option>
+                            <option value="detect_jam">Обнаружение + Подавление (2 в 1)</option>
+                            <option value="detect_only">Только обнаружение / Пеленгация</option>
+                            <option value="jam_only">Подавление / Спуфинг</option>
+                            <option value="fpv">Перехват / Подавление FPV</option>
+                        </select>
+                    </div>
+
+                    <!-- Сброс фильтров -->
+                    <div class="md:col-span-3 flex items-center justify-end">
+                        <button id="btn-reset-filters" class="w-full px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                            <span>Сбросить фильтры</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Вкладки категорий -->
+                <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-800/80 font-mono text-xs" id="category-tabs">
+                    <button data-cat="all" class="cat-tab active px-3.5 py-2 rounded-lg bg-kmk-cyan text-kmk-bg font-bold transition-all">
+                        Все системы (32)
+                    </button>
+                    <button data-cat="stationary" class="cat-tab px-3.5 py-2 rounded-lg bg-kmk-bg border border-slate-800 text-slate-300 hover:border-kmk-cyan transition-all">
+                        Стационарные комплексы (8)
+                    </button>
+                    <button data-cat="mobile" class="cat-tab px-3.5 py-2 rounded-lg bg-kmk-bg border border-slate-800 text-slate-300 hover:border-kmk-cyan transition-all">
+                        Мобильные и автомобильные (5)
+                    </button>
+                    <button data-cat="portable" class="cat-tab px-3.5 py-2 rounded-lg bg-kmk-bg border border-slate-800 text-slate-300 hover:border-kmk-cyan transition-all">
+                        Портативные и ручные (9)
+                    </button>
+                    <button data-cat="directional" class="cat-tab px-3.5 py-2 rounded-lg bg-kmk-bg border border-slate-800 text-slate-300 hover:border-kmk-cyan transition-all">
+                        Подавители и спуферы (5)
+                    </button>
+                    <button data-cat="optical" class="cat-tab px-3.5 py-2 rounded-lg bg-kmk-bg border border-slate-800 text-slate-300 hover:border-kmk-cyan transition-all">
+                        Камеры серии DD-E (5)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Сетка карточек оборудования (рендерится через JS из полной базы 32 моделей) -->
+            <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Карточки вставляются динамически -->
+            </div>
+
+            <!-- Сообщение если ничего не найдено -->
+            <div id="catalog-empty" class="hidden text-center py-16 bg-kmk-card/50 border border-slate-800 rounded-xl">
+                <i data-lucide="search-x" class="w-10 h-10 text-slate-500 mx-auto mb-3"></i>
+                <h3 class="text-lg font-bold text-white">Оборудование по заданным параметрам не найдено</h3>
+                <p class="text-sm text-slate-400 mt-1">Попробуйте изменить поисковый запрос или сбросить фильтры категорий.</p>
+            </div>
+
+            <!-- Примечание о дальнейшем расширении линейки -->
+            <div class="mt-10 p-5 rounded-xl bg-kmk-surface border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-start gap-3.5">
+                    <div class="p-2.5 rounded-lg bg-kmk-amber/10 border border-kmk-amber/30 text-kmk-amber shrink-0">
+                        <i data-lucide="cpu" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-white">Дополнительные модули и радиолокационные станции</div>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Помимо представленных 32 моделей, для интеграции в единый контур безопасности доступны радары <span class="text-kmk-cyan font-mono">XW/SR226</span> и специализированные модули усиления сигнала по техническому заданию заказчика.
+                        </p>
+                    </div>
+                </div>
+                <a href="#request-section" class="px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-kmk-amber hover:text-kmk-bg text-xs font-mono font-semibold text-white whitespace-nowrap transition-all">
+                    Запросить ТТХ радаров
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ЧТО МЫ ОБЕСПЕЧИВАЕМ (7 ЭТАПОВ ПОЛНОГО ЦИКЛА) -->
+    <section id="services" class="py-20 bg-kmk-surface/60 border-y border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mb-14">
+                <div class="font-mono text-xs text-kmk-cyan uppercase tracking-widest mb-2">// КОМПЛЕКСНЫЙ ПОДХОД «ПОД КЛЮЧ»</div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Что мы обеспечиваем</h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    ТОО «ҚазМұнайҚызмет» сопровождает проект на всех этапах жизненного цикла: от первичного радиочастотного аудита объекта до круглосуточной сервисной поддержки.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Этап 1 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl">
+                    <div class="font-mono text-2xl font-extrabold text-kmk-cyan mb-3">01</div>
+                    <h3 class="text-base font-bold text-white leading-snug">Поставка оборудования и комплексных Anti-Drone решений</h3>
+                </div>
+                <!-- Этап 2 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl">
+                    <div class="font-mono text-2xl font-extrabold text-kmk-cyan mb-3">02</div>
+                    <h3 class="text-base font-bold text-white leading-snug">Подбор оборудования с учётом задач и особенностей объекта</h3>
+                </div>
+                <!-- Этап 3 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl">
+                    <div class="font-mono text-2xl font-extrabold text-kmk-cyan mb-3">03</div>
+                    <h3 class="text-base font-bold text-white leading-snug">Технические консультации и обследование объекта</h3>
+                </div>
+                <!-- Этап 4 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl">
+                    <div class="font-mono text-2xl font-extrabold text-kmk-amber mb-3">04</div>
+                    <h3 class="text-base font-bold text-white leading-snug">Установка и пусконаладочные работы</h3>
+                </div>
+                <!-- Этап 5 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl">
+                    <div class="font-mono text-2xl font-extrabold text-kmk-amber mb-3">05</div>
+                    <h3 class="text-base font-bold text-white leading-snug">Обучение персонала</h3>
+                </div>
+                <!-- Этап 6 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl">
+                    <div class="font-mono text-2xl font-extrabold text-kmk-amber mb-3">06</div>
+                    <h3 class="text-base font-bold text-white leading-snug">Сервисное и техническое сопровождение</h3>
+                </div>
+                <!-- Этап 7 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 p-6 rounded-xl sm:col-span-2 lg:col-span-2 flex flex-col justify-between bg-gradient-to-r from-kmk-card to-slate-900">
+                    <div>
+                        <div class="font-mono text-2xl font-extrabold text-emerald-400 mb-3">07</div>
+                        <h3 class="text-base font-bold text-white leading-snug">Гарантийное и постгарантийное обслуживание</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3 font-mono">
+                        Оперативный склад ЗИП и сервисные инженеры на территории Республики Казахстан.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОЭТАПНАЯ ЛОКАЛИЗАЦИЯ В РЕСПУБЛИКЕ КАЗАХСТАН -->
+    <section id="localization" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-kmk-amber/15 border border-kmk-amber/40 font-mono text-xs text-kmk-amber mb-3">
+                    <span>СТРАТЕГИЯ РАЗВИТИЯ В РК</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Поэтапная локализация</h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    ТОО «ҚазМұнайҚызмет» рассматривает поэтапную локализацию Anti-Drone решений в Республике Казахстан для обеспечения технологической независимости и повышения доли местного содержания.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <!-- Линия прогресса -->
+                <div class="hidden md:block absolute top-12 left-16 right-16 h-0.5 bg-gradient-to-r from-kmk-cyan via-kmk-amber to-emerald-400 opacity-40"></div>
+
+                <!-- Этап 1 -->
+                <div class="hud-box bg-kmk-card border border-slate-800 rounded-xl p-8 relative z-10">
+                    <div class="inline-block px-3 py-1 rounded bg-kmk-cyan/15 border border-kmk-cyan/40 font-mono text-xs font-bold text-kmk-cyan mb-5">
+                        ЭТАП 1
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">
+                        Организация сборки оборудования на территории Казахстана
+                    </h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Создание сборочных линий, входной контроль комплектующих, стендовые испытания и адаптация программного обеспечения под требования заказчиков в РК.
+                    </p>
+                </div>
+
+                <!-- Развитие -->
+                <div class="hud-box bg-kmk-card border border-slate-800 rounded-xl p-8 relative z-10">
+                    <div class="inline-block px-3 py-1 rounded bg-kmk-amber/15 border border-kmk-amber/40 font-mono text-xs font-bold text-kmk-amber mb-5">
+                        РАЗВИТИЕ
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">
+                        Собственные производственные мощности
+                    </h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Освоение выпуска корпусных элементов, антенно-фидерных устройств, систем терморегуляции и блоков электропитания на базе собственной производственной площадки.
+                    </p>
+                </div>
+
+                <!-- 2027–2028 -->
+                <div class="hud-box bg-kmk-card border border-emerald-500/40 rounded-xl p-8 relative z-10 shadow-[0_0_30px_rgba(16,185,129,0.08)]">
+                    <div class="inline-block px-3 py-1 rounded bg-emerald-500/15 border border-emerald-500/40 font-mono text-xs font-bold text-emerald-400 mb-5">
+                        2027–2028
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">
+                        Локализация производства в Республике Казахстан
+                    </h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Полноценный цикл серийного производства комплексов противодействия БПЛА на территории Республики Казахстан с получением сертификатов отечественного товаропроизводителя.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ ЗАПРОСА КОММЕРЧЕСКОГО ПРЕДЛОЖЕНИЯ (ЗАЯВКА) -->
+    <section id="request-section" class="py-24 bg-kmk-surface/70 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="hud-box bg-kmk-card border border-slate-700 rounded-2xl p-6 sm:p-10 lg:p-12 shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    
+                    <!-- Левая колонка: Выбранная спецификация и контакты -->
+                    <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+                        <div>
+                            <div class="font-mono text-xs text-kmk-cyan uppercase tracking-widest mb-2">// ПОДБОР И ПОСТАВКА В РК</div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Запросить технико-коммерческое предложение</h2>
+                            <p class="text-sm text-slate-400 leading-relaxed">
+                                Выберите интересующие модели в каталоге или укажите параметры вашего объекта. Инженеры <strong class="text-white">ТОО «ҚазМұнайҚызмет»</strong> подготовят схему перекрытия периметра и расчет стоимости.
+                            </p>
+                        </div>
+
+                        <!-- Блок выбранного оборудования из каталога -->
+                        <div class="bg-kmk-bg border border-slate-800 rounded-xl p-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
+                                <span class="font-mono text-xs text-kmk-amber font-bold uppercase flex items-center gap-1.5">
+                                    <i data-lucide="list-checks" class="w-4 h-4"></i> Выбранные позиции (<span id="form-spec-count">0</span>)
+                                </span>
+                                <button type="button" onclick="clearSpecification()" class="text-[11px] font-mono text-slate-500 hover:text-red-400">Очистить</button>
+                            </div>
+                            <div id="form-spec-list" class="space-y-2 max-h-44 overflow-y-auto text-xs font-mono">
+                                <div class="text-slate-500 py-2">Список пуст. Вы можете добавить модели из каталога выше.</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 pt-2 border-t border-slate-800 font-mono text-xs text-slate-300">
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-kmk-cyan shrink-0"></i>
+                                <span>Республика Казахстан // Поставка и шеф-монтаж по всем регионам</span>
+                            </div>
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="shield" class="w-4 h-4 text-kmk-amber shrink-0"></i>
+                                <span>ТОО «ҚазМұнайҚызмет» — Промышленная безопасность</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Правая колонка: Форма заявки -->
+                    <div class="lg:col-span-7">
+                        <form id="kp-request-form" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-mono text-xs text-slate-400 mb-1.5">НАИМЕНОВАНИЕ ОРГАНИЗАЦИИ (ТОО / АО) *</label>
+                                    <input type="text" required placeholder="ТОО «КазТрансОйл-Сервис»" class="w-full px-4 py-3 rounded-lg bg-kmk-bg border border-slate-700 text-white text-sm focus:outline-none focus:border-kmk-cyan">
+                                </div>
+                                <div>
+                                    <label class="block font-mono text-xs text-slate-400 mb-1.5">ОТРАСЛЬ ОБЪЕКТА *</label>
+                                    <select required class="w-full px-4 py-3 rounded-lg bg-kmk-bg border border-slate-700 text-white text-sm focus:outline-none focus:border-kmk-cyan">
+                                        <option value="Нефтегазовая отрасль">Нефтегазовая отрасль</option>
+                                        <option value="Энергетика">Энергетика</option>
+                                        <option value="Логистика">Логистика</option>
+                                        <option value="Промышленная и критически важная инфраструктура">Промышленная и критически важная инфраструктура</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-mono text-xs text-slate-400 mb-1.5">КОНТАКТНОЕ ЛИЦО (ФИО, ДОЛЖНОСТЬ) *</label>
+                                    <input type="text" required placeholder="Ахметов Ерлан, Начальник СБ" class="w-full px-4 py-3 rounded-lg bg-kmk-bg border border-slate-700 text-white text-sm focus:outline-none focus:border-kmk-cyan">
+                                </div>
+                                <div>
+                                    <label class="block font-mono text-xs text-slate-400 mb-1.5">ТЕЛЕФОН ДЛЯ СВЯЗИ *</label>
+                                    <input type="tel" required placeholder="+7 (7__) ___-__-__" class="w-full px-4 py-3 rounded-lg bg-kmk-bg border border-slate-700 text-white text-sm focus:outline-none focus:border-kmk-cyan">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block font-mono text-xs text-slate-400 mb-1.5">КОРПОРАТИВНЫЙ EMAIL</label>
+                                <input type="email" placeholder="security@company.kz" class="w-full px-4 py-3 rounded-lg bg-kmk-bg border border-slate-700 text-white text-sm focus:outline-none focus:border-kmk-cyan">
+                            </div>
+
+                            <div>
+                                <label class="block font-mono text-xs text-slate-400 mb-1.5">ПАРАМЕТРЫ ОБЪЕКТА И ЗАДАЧИ</label>
+                                <textarea rows="3" placeholder="Укажите регион расположения в РК, протяженность периметра, необходимость обследования объекта или требуемые модели (например, KAZ-01P, DD-E21)..." class="w-full px-4 py-3 rounded-lg bg-kmk-bg border border-slate-700 text-white text-sm focus:outline-none focus:border-kmk-cyan"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 rounded-lg bg-kmk-cyan text-kmk-bg font-bold text-sm uppercase tracking-wider hover:bg-cyan-300 transition-all glow-cyan flex items-center justify-center gap-2">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                <span>Отправить запрос в ТОО «ҚазМұнайҚызмет»</span>
+                            </button>
+                        </form>
+
+                        <!-- Уведомление об успешной отправке -->
+                        <div id="kp-success-box" class="hidden bg-emerald-950/40 border border-emerald-500/50 rounded-xl p-8 text-center space-y-4">
+                            <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                                <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Запрос на КП успешно зарегистрирован</h3>
+                            <p class="text-sm text-slate-300">
+                                Номер регистрации заявки: <span id="kp-ticket-id" class="font-mono text-kmk-cyan font-bold">#KMK-2026</span>. Технический специалист свяжется с вами для согласования деталей и обследования объекта.
+                            </p>
+                            <button id="btn-new-kp" class="px-5 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-white">
+                                Сформировать новый запрос
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОДВАЛ (FOOTER) -->
+    <footer class="bg-kmk-bg border-t border-slate-800/90 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-slate-800/80">
+                <div class="md:col-span-6 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-kmk-cyan"></i>
+                        <span class="font-extrabold text-lg text-white">ТОО «ҚазМұнайҚызмет»</span>
+                    </div>
+                    <p class="text-sm text-slate-400 max-w-lg">
+                        Промышленная безопасность и поставка высокотехнологичных систем противодействия беспилотным летательным аппаратам (Anti-Drone Systems) на территории Республики Казахстан.
+                    </p>
+                </div>
+
+                <div class="md:col-span-3 space-y-2 font-mono text-xs">
+                    <div class="text-white font-bold uppercase mb-3">Разделы</div>
+                    <div><a href="#about" class="text-slate-400 hover:text-kmk-cyan">О компании</a></div>
+                    <div><a href="#sectors" class="text-slate-400 hover:text-kmk-cyan">Отрасли применения</a></div>
+                    <div><a href="#catalog" class="text-slate-400 hover:text-kmk-cyan">Каталог (32 модели)</a></div>
+                    <div><a href="#localization" class="text-slate-400 hover:text-kmk-cyan">Локализация 2027–2028</a></div>
+                </div>
+
+                <div class="md:col-span-3 space-y-2 font-mono text-xs">
+                    <div class="text-white font-bold uppercase mb-3">Направления</div>
+                    <div class="text-slate-400">Серия KAZ (Стационарные / Мобильные)</div>
+                    <div class="text-slate-400">Серия DF (Детекторы / Спуферы)</div>
+                    <div class="text-slate-400">Серия DD-E (Оптика / Тепловизоры)</div>
+                    <div class="text-kmk-cyan pt-1">Республика Казахстан</div>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 font-mono gap-4">
+                <div>© 2026 ТОО «ҚазМұнайҚызмет» — ANTI-DRONE SYSTEMS. Все права защищены.</div>
+                <div>ПРОМЫШЛЕННАЯ БЕЗОПАСНОСТЬ РЕСПУБЛИКИ КАЗАХСТАН</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- МОДАЛЬНОЕ ОКНО ПОДРОБНЫХ ТТХ МОДЕЛИ -->
+    <div id="ttx-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="hud-box bg-kmk-card border border-slate-700 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeTtxModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-800/70">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span id="ttx-modal-cat" class="font-mono text-[11px] px-2.5 py-1 rounded bg-kmk-cyan/15 text-kmk-cyan border border-kmk-cyan/30 uppercase">
+                    Категория
+                </span>
+                <span id="ttx-modal-code" class="font-mono text-xs text-slate-400">
+                    ИНДЕКС
+                </span>
+            </div>
+
+            <h3 id="ttx-modal-title" class="text-2xl font-bold text-white mb-3">Название модели</h3>
+            <p id="ttx-modal-desc" class="text-sm text-slate-300 leading-relaxed mb-5">Описание</p>
+
+            <!-- Ключевые метрики в модалке -->
+            <div class="grid grid-cols-2 gap-3 mb-5 font-mono text-xs">
+                <div class="bg-kmk-bg p-3.5 rounded-lg border border-slate-800">
+                    <div class="text-slate-500 text-[11px]">ДАЛЬНОСТЬ ОБНАРУЖЕНИЯ</div>
+                    <div id="ttx-modal-detect" class="text-kmk-cyan font-bold text-sm mt-1">—</div>
+                </div>
+                <div class="bg-kmk-bg p-3.5 rounded-lg border border-slate-800">
+                    <div class="text-slate-500 text-[11px]">ДАЛЬНОСТЬ ПОДАВЛЕНИЯ</div>
+                    <div id="ttx-modal-jam" class="text-kmk-amber font-bold text-sm mt-1">—</div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="mb-5">
+                <div class="font-mono text-xs text-slate-400 uppercase mb-2">Ключевые особенности</div>
+                <div id="ttx-modal-features" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- Таблица полных ТТХ -->
+            <div class="bg-kmk-bg border border-slate-800 rounded-xl p-4 mb-6">
+                <div class="font-mono text-xs text-kmk-cyan uppercase mb-3 border-b border-slate-800 pb-2">
+                    Технические характеристики
+                </div>
+                <div id="ttx-modal-specs" class="space-y-2.5 font-mono text-xs"></div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="ttx-modal-add-btn" class="flex-1 py-3.5 rounded-lg bg-kmk-cyan text-kmk-bg font-bold text-xs uppercase tracking-wider hover:bg-cyan-300 transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Добавить в спецификацию КП</span>
+                </button>
+                <button onclick="closeTtxModal()" class="px-6 py-3.5 rounded-lg bg-slate-800 text-slate-300 font-semibold text-xs uppercase tracking-wider hover:text-white transition-all">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ВЫДВИЖНАЯ ПАНЕЛЬ (DRAWER) СПЕЦИФИКАЦИИ ОБОРУДОВАНИЯ -->
+    <div id="spec-drawer" class="fixed inset-0 z-50 hidden justify-end bg-black/75 backdrop-blur-sm">
+        <div class="bg-kmk-surface border-l border-slate-800 w-full max-w-md h-full flex flex-col justify-between p-6 shadow-2xl">
+            <div>
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+                    <div>
+                        <div class="font-mono text-[10px] text-kmk-cyan uppercase">ТОО «ҚазМұнайҚызмет»</div>
+                        <h3 class="text-lg font-bold text-white">Спецификация для КП</h3>
+                    </div>
+                    <button onclick="closeSpecDrawer()" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div id="drawer-items-container" class="space-y-3 max-h-[65vh] overflow-y-auto pr-1">
+                    <!-- Выбранные товары -->
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800 space-y-3">
+                <button onclick="proceedToKpForm()" class="w-full py-3.5 rounded-lg bg-kmk-cyan text-kmk-bg font-bold text-xs uppercase tracking-wider hover:bg-cyan-300 transition-all">
+                    Перейти к оформлению запроса КП
+                </button>
+                <button onclick="clearSpecification()" class="w-full py-2.5 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 font-mono text-xs transition-all">
+                    Очистить список
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT: ПОЛНАЯ БАЗА ДАННЫХ 32 МОДЕЛЕЙ КАТАЛОГА, ФИЛЬТРЫ, РАДАР И КОНФИГУРАТОР КП -->
+    <script>
+        lucide.createIcons();
+
+        // Мобильное меню
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // =========================================================================
+        // ПОЛНАЯ БАЗА ОБОРУДОВАНИЯ ТОО «ҚАЗМҰНАЙҚЫЗМЕТ» (ВСЕ 32 МОДЕЛИ ИЗ КАТАЛОГА)
+        // =========================================================================
+        const equipmentCatalog = [
+            // --- КАТЕГОРИЯ 1: СТАЦИОНАРНЫЕ КОМПЛЕКСЫ (8 моделей) ---
+            {
+                id: 'KAZ-01P',
+                name: 'KAZ-01P Стационарное устройство обнаружения и подавления',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'detect_jam',
+                isFpv: true,
+                detectRange: '≥10 км',
+                jamRange: '≥3 км (спуфинг 1–3 км+)',
+                description: 'Обнаружение, подавление и спуфинг в одном изделии; один блок обнаружения связывается с несколькими блоками подавления («1+N»).',
+                features: ['Обнаружение 360° во всём частотном диапазоне', 'Обнаружение, подавление и спуфинг в одном изделии', 'Сильное подавление FPV', 'Перехват FPV-видео', 'Связка «1+N»'],
+                specs: [
+                    ['Дальность обнаружения', '≥10 км (70 МГц – 6 ГГц)'],
+                    ['Перехват FPV-видео', '500 МГц – 6,2 ГГц, ≥1,5 км'],
+                    ['Дальность подавления', '≥3 км'],
+                    ['Диапазоны подавления', '700–840, 860–930, 1170–1290, 1400–1490, 1560–1620, 2385–2490, 5150–5250, 5725–5850 МГц'],
+                    ['Спуфинг', 'GPS, ГЛОНАСС, BD; радиус 1–3 км+; запуск ≤4 с (опция)'],
+                    ['Точность пеленга', '≤±15° СКО'],
+                    ['Условия эксплуатации', 'IP66, −40…+60 °C']
+                ]
+            },
+            {
+                id: 'KAZ-02P',
+                name: 'KAZ-02P Стационарное устройство обнаружения',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'detect_only',
+                isFpv: true,
+                detectRange: '≥10 км',
+                jamRange: 'Не предусмотрено (только обнаружение)',
+                description: 'Определяет тип дрона и Remote ID: обнаружение, раннее предупреждение, позиционирование и сопровождение. Охрана 24/7.',
+                features: ['Охрана без оператора 24/7', 'Перехват FPV-видео', 'Индивидуальные решения «1 на 1»', 'Обнаружение 360° во всём частотном диапазоне', 'Связка «1+N»'],
+                specs: [
+                    ['Дальность обнаружения', '≥10 км (70 МГц – 6 ГГц)'],
+                    ['Перехват FPV-видео', '500 МГц – 6,2 ГГц, ≥1,5 км'],
+                    ['Зона обзора и точность', 'Азимут 360°, точность пеленга ≤±15°'],
+                    ['Условия эксплуатации', 'IP66, −40…+60 °C'],
+                    ['Вес и габариты', '≤17 кг; 400×531 мм']
+                ]
+            },
+            {
+                id: 'KAZ-03(P)',
+                name: 'KAZ-03(P) Стационарное устройство обнаружения и подавления',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'detect_jam',
+                isFpv: true,
+                detectRange: '≥10 км',
+                jamRange: '≥3 км',
+                description: 'Автоматически обнаруживает и подавляет дроны без надзора; 13 диапазонов и 4 направленные решётки подавления.',
+                features: ['Сильное подавление FPV', 'Перехват FPV-видео', '13 диапазонов и 4 направленные решётки', 'Обнаружение 360°', 'Гибкое развёртывание «1+N»'],
+                specs: [
+                    ['Обнаружение', '70 МГц – 6 ГГц, ≥10 км; реакция ≤5 с; пеленг ≤±15°'],
+                    ['Всенаправленное подавление', '13 полос от 410 до 6060 МГц (настраивается)'],
+                    ['Направленное подавление', '830–940, 2385–2490, 5100–5250, 5720–5860 МГц'],
+                    ['Дальность подавления', '≥3 км'],
+                    ['Условия эксплуатации', 'IP66, −40…+60 °C'],
+                    ['Вес и габариты', '≤170 кг; 1367×1013×2661 мм']
+                ]
+            },
+            {
+                id: 'KAZ-35',
+                name: 'KAZ-35 Стационарное устройство обнаружения и подавления',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'detect_jam',
+                isFpv: false,
+                detectRange: '≥8 км',
+                jamRange: '≥3 км',
+                description: 'Система обнаружения БПЛА и радиоподавления; дрон зависает, садится или возвращается. Работа без оператора.',
+                features: ['Обнаружение во всех диапазонах', 'Интеграция обнаружения и подавления', 'Высокая масштабируемость', 'Работа без оператора'],
+                specs: [
+                    ['Обнаружение', '70 МГц – 6 ГГц, ≥8 км, азимут 360°'],
+                    ['Диапазоны подавления', '840–930, 1170–1290, 1400–1490, 1560–1620, 2385–2490, 5150–5250, 5720–5860 МГц'],
+                    ['Дальность подавления', '≥3 км (DJI Mavic 2)'],
+                    ['Условия эксплуатации', 'IP66, −40…+60 °C'],
+                    ['Вес и габариты', '≤30 кг; 465×275×510 мм']
+                ]
+            },
+            {
+                id: 'KAZ-40',
+                name: 'KAZ-40 Стационарное устройство обнаружения (Remote ID)',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'detect_only',
+                isFpv: false,
+                detectRange: '≥2 км (разбор сигнала RID)',
+                jamRange: 'Не предусмотрено (только обнаружение)',
+                description: 'Спектральный мониторинг, приём и декодирование RID, слияние данных. Работает автономно или с вышестоящей платформой.',
+                features: ['Разбор протокола RID', 'Автоматическое сканирование', 'Удалённое управление с нескольких точек', 'Передача данных в реальном времени'],
+                specs: [
+                    ['Чувствительность приёма', '≤−102 дБм (2,4 ГГц), ≤−100 дБм (5,8 ГГц)'],
+                    ['Дальность разбора RID', '≥2 км; охват 360° × 90°'],
+                    ['Число сопровождаемых целей', '≥30 дронов, задержка ≤200 мс'],
+                    ['Точность позиционирования', 'Гориз. ≤10 м, верт. ≤5 м (по RID)'],
+                    ['Интерфейсы связи', 'Ethernet 10/100/1000 Мбит/с, 4G/5G'],
+                    ['Условия эксплуатации', 'IP66, −20…+65 °C']
+                ]
+            },
+            {
+                id: 'DF-05',
+                name: 'DF-05 Стационарное устройство полнодиапазонного подавления и спуфинга',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (подавление и спуфинг)',
+                jamRange: '3 км (радиус спуфинга 1 км)',
+                description: 'Излучением радиосигналов создаёт зону экранирования: БПЛА вынужден вернуться или покинуть зону. Работает с радиодетектором.',
+                features: ['Подавление во всём диапазоне', 'Интегрированная конструкция', 'Несколько режимов подавления', 'Автономный выбор диапазонов', 'Работа без оператора'],
+                specs: [
+                    ['Подавление', '300 МГц – 6 ГГц; до 6 каналов, полоса до 250 МГц'],
+                    ['Навигационный спуфинг', 'GPS L1 C/A, ГЛОНАСС G1, BDS B1I, Galileo E1'],
+                    ['Дальность действия', 'Подавление 3 км; радиус спуфинга 1 км'],
+                    ['Сектор воздействия', 'Азимут 0–360°, угол места 0–70°'],
+                    ['Электропитание', 'AC 220 В, ≤2500 Вт'],
+                    ['Вес и габариты', '30 кг; 560×640×510 мм']
+                ]
+            },
+            {
+                id: 'DF-07',
+                name: 'DF-07 Стационарный многофункциональный комплекс',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'detect_jam',
+                isFpv: false,
+                detectRange: '5 км',
+                jamRange: '3 км',
+                description: 'Обнаружение и подавление; всенаправленное излучение, водо- и пылезащита.',
+                features: ['Обнаружение и подавление 2 в 1', 'Выбор частот подавления', 'Всенаправленное излучение 360°', 'Водо- и пылезащита'],
+                specs: [
+                    ['Алгоритмы анализа', 'Спектр, Drone ID, Remote ID'],
+                    ['Обнаружение', '300–6000 МГц, дальность 5 км'],
+                    ['Помехи (подавление)', '400, 800, 900 МГц, 1,2; 1,4; 1,6; 2,4; 5,2; 5,8 ГГц; 3 км'],
+                    ['Условия и мощность', '≤800 Вт; IP66; −40…+60 °C']
+                ]
+            },
+            {
+                id: 'DD-E21',
+                name: 'DD-E21 Комплекс противодействия дронам',
+                category: 'stationary',
+                categoryLabel: 'Стационарный комплекс',
+                funcType: 'detect_jam',
+                isFpv: false,
+                detectRange: 'Комплексное (Радар X-диапазона + РЧ + ОЭС)',
+                jamRange: 'Подавление + навигационный спуфинг',
+                description: 'Радар X-диапазона, РЧ-детектор, оптико-электронная камера, подавление и навигационный спуфинг в одном комплексе. Обзор 360°, IP66.',
+                features: ['Спектральное обнаружение и анализ сигналов БПЛА', 'Радар с цифровым формированием луча', 'Оптико-электронное сопровождение, высокоточный сервопривод', 'Модульная архитектура'],
+                specs: [
+                    ['Состав сенсоров', 'Радар X-диапазона, РЧ-детектор, оптико-электронная камера'],
+                    ['Средства воздействия', 'Радиоподавление и навигационный спуфинг'],
+                    ['Зона обзора', 'Круговой обзор 360°'],
+                    ['Степень защиты', 'IP66']
+                ]
+            },
+
+            // --- КАТЕГОРИЯ 2: МОБИЛЬНЫЕ И АВТОМОБИЛЬНЫЕ (5 моделей) ---
+            {
+                id: 'KAZ-08(P)',
+                name: 'KAZ-08(P) Автомобильное средство обнаружения и подавления (6/8 полос)',
+                category: 'mobile',
+                categoryLabel: 'Мобильный / Автомобильный',
+                funcType: 'detect_jam',
+                isFpv: true,
+                detectRange: '≥5 км',
+                jamRange: '≥3 км',
+                description: 'Радиоспектральное обнаружение и подавление по кругу 360°: дрон вынужден вернуться или экстренно сесть.',
+                features: ['3 сменных варианта применения', 'Установка на разные автомобили', 'Подавление на 3 км', 'Перехват FPV-видео', 'Обнаружение и подавление 360°'],
+                specs: [
+                    ['Обнаружение', '70 МГц – 6 ГГц, ≥5 км; FPV-видео 500 МГц – 6,2 ГГц, ≥1,5 км'],
+                    ['Полосы подавления', '6 полос (900 МГц, 1,2; 1,5; 2,4; 5,2; 5,8 ГГц) или 8 полос'],
+                    ['Дальность подавления', '≥3 км'],
+                    ['Зона охвата', '360° по горизонтали, −90…+90° по углу места'],
+                    ['Условия и вес', 'IP65, −20…+60 °C; вес 57,6 кг (6 полос) / 50 кг (8 полос)']
+                ]
+            },
+            {
+                id: 'KAZ-11',
+                name: 'KAZ-11 Автомобильное средство подавления FPV-дронов (8/10 полос)',
+                category: 'mobile',
+                categoryLabel: 'Мобильный / Автомобильный',
+                funcType: 'jam_only',
+                isFpv: true,
+                detectRange: 'Не предусмотрено (только подавление)',
+                jamRange: '0–1 км',
+                description: 'Создаёт помехи связи дрона с пультом и навигационным сигналам. Высокая мобильность, быстрое развёртывание в нужной зоне.',
+                features: ['Помехи 360°', 'Дальность подавления 1 км', 'Автоматический и дистанционный режимы', 'Сильное подавление FPV', 'Настраиваемые диапазоны'],
+                specs: [
+                    ['Полосы подавления (8)', '400–500, 630–780, 770–900, 890–1020, 1220–1360, 2400–2500, 5100–5300, 5700–5900 МГц'],
+                    ['Выходная мощность', '≥30 Вт на каждую полосу'],
+                    ['Дальность и сектор', '0–1 км, направление 360°, реакция ≤5 с'],
+                    ['Питание и условия', 'AC 220/110 В, ≤1000 Вт; −40…+60 °C, панельное управление']
+                ]
+            },
+            {
+                id: 'KAZ-18',
+                name: 'KAZ-18 Переносной комплекс обнаружения и подавления',
+                category: 'mobile',
+                categoryLabel: 'Мобильный / Переносной',
+                funcType: 'detect_jam',
+                isFpv: false,
+                detectRange: '≥2 км',
+                jamRange: '≥2 км',
+                description: 'Подавляя связь, видео и навигацию, заставляет дрон зависнуть, сесть или вернуться. Быстрое мобильное развёртывание.',
+                features: ['Обнаружение 400 МГц – 6 ГГц', 'Подавление на 2 км', 'Практичность в эксплуатации', 'Быстрое мобильное развёртывание', 'Сенсорный экран'],
+                specs: [
+                    ['Обнаружение', '400–1500, 2200–2500, 5150–5950 МГц, ≥2 км; пеленг ≤10°'],
+                    ['Подавление', '900 МГц, 1,2; 1,5; 2,4; 5,2; 5,8 ГГц, ≥2 км'],
+                    ['Сектор и дисплей', 'Сектор ≥30°; сенсорный экран ≥3,5"'],
+                    ['Автономность', '≥20 ч (с обнаружением в дежурном режиме)'],
+                    ['Вес и габариты', '≤8,5 кг; 390×160×326 мм']
+                ]
+            },
+            {
+                id: 'DF-04',
+                name: 'DF-04 Многофункциональный комплекс обнаружения и подавления',
+                category: 'mobile',
+                categoryLabel: 'Мобильный комплекс',
+                funcType: 'detect_jam',
+                isFpv: false,
+                detectRange: '5 км',
+                jamRange: '3 км',
+                description: 'Обнаружение и подавление в одном изделии; автоматическое пополнение библиотеки спектральных признаков.',
+                features: ['Обнаружение и подавление 2 в 1', 'Обнаружение 5 км, подавление 3 км', 'Аккумулятор большой ёмкости', 'Автоматическое пополнение библиотеки'],
+                specs: [
+                    ['Обнаружение', '300–6000 МГц, 5 км; пеленг ≤30° (спектр), ≤0,5° (Drone ID)'],
+                    ['Подавление', '433, 800, 900 МГц, 1,2; 1,4; 1,6; 2,4; 5,2; 5,8 ГГц; 3 км'],
+                    ['Автономная работа', 'Встроенная АКБ: обн. 1 ч / под. 30 мин; внешняя: 5 ч / 40 мин; расширенная внешняя: 10 ч / 2 ч'],
+                    ['Условия эксплуатации', '−20…+55 °C; ≤650 Вт']
+                ]
+            },
+            {
+                id: 'DF-06',
+                name: 'DF-06 Многофункциональный комплекс с гимбалом',
+                category: 'mobile',
+                categoryLabel: 'Мобильный / Опорно-поворотный',
+                funcType: 'detect_jam',
+                isFpv: false,
+                detectRange: '5 км',
+                jamRange: '3 км',
+                description: 'Обнаружение и подавление; поворотная платформа PAN/TILT для автоматического наведения на цель.',
+                features: ['Обнаружение и подавление 2 в 1', 'Обнаружение 5 км, подавление 3 км', 'Гимбал PAN/TILT', 'Автоматическое пополнение библиотеки'],
+                specs: [
+                    ['Обнаружение', '300–6000 МГц, 5 км; пеленг ≤30° (спектр), ≤0,5° (Drone ID)'],
+                    ['Подавление', '433, 800, 900 МГц, 1,2; 1,4; 1,6; 2,4; 5,2; 5,8 ГГц; 3 км'],
+                    ['Питание', 'Внешний адаптер, ≤750 Вт'],
+                    ['Условия и вес', '−20…+55 °C; ≤25 кг']
+                ]
+            },
+
+            // --- КАТЕГОРИЯ 3: ПОРТАТИВНЫЕ И РУЧНЫЕ (9 моделей) ---
+            {
+                id: 'KAZ-12 (14)',
+                name: 'KAZ-12 (14) Портативный детектор с оповещением на часы',
+                category: 'portable',
+                categoryLabel: 'Портативный / Носимый',
+                funcType: 'detect_only',
+                isFpv: true,
+                detectRange: '≥1,5 км',
+                jamRange: 'Не предусмотрено (только обнаружение)',
+                description: 'Детектор и наручные часы-терминал; сверхширокополосный приём, связка «1+N», низкий уровень ложных тревог.',
+                features: ['Беспроводное обновление', 'Связка «1+N»', 'Двухрежимное обнаружение', 'Обнаружение во всём диапазоне', 'Раннее предупреждение о FPV', 'Низкий уровень ложных тревог'],
+                specs: [
+                    ['Обнаружение', '70 МГц – 6,2 ГГц, радиус ≥1,5 км'],
+                    ['Наручные часы-терминал', 'Приём сигнала оповещения на расстоянии ≥500 м'],
+                    ['Время реакции', '≤3 с (8 диапазонов), ≤5 с (12 диапазонов)'],
+                    ['Индикация тревоги', 'Звук, вибрация, свет'],
+                    ['Автономность', '≥6 ч (устройство), ≥12 ч (часы)'],
+                    ['Габариты и температура', '68×50×154 мм; −20…+50 °C']
+                ]
+            },
+            {
+                id: 'KAZ-15',
+                name: 'KAZ-15 Портативный перехватчик FPV-видеосигнала',
+                category: 'portable',
+                categoryLabel: 'Портативный / Носимый',
+                funcType: 'detect_only',
+                isFpv: true,
+                detectRange: '≥1,5 км',
+                jamRange: 'Не предусмотрено (перехват и запись видео)',
+                description: 'Обнаружение, перехват, отображение и запись FPV-видео; тревога звуком, светом и вибрацией.',
+                features: ['Обнаружение 70 МГц – 6,2 ГГц', 'Запись и хранение видео', 'Портативная конструкция', 'Покрытие FPV 500 МГц – 6,2 ГГц', 'Режим «1+N»'],
+                specs: [
+                    ['Диапазон частот', 'Обнаружение 70 МГц – 6,2 ГГц; FPV 500 МГц – 6,2 ГГц'],
+                    ['Радиус действия', '≥1,5 км; реакция ≤3 с (8 диапазонов), ≤5 с (12)'],
+                    ['Запись и экран', 'Карта памяти 32 ГБ (до 256 ГБ), встроенный экран 7"'],
+                    ['Автономность и размер', '≥5 ч; 215×44×150 мм']
+                ]
+            },
+            {
+                id: 'KAZ-16',
+                name: 'KAZ-16 Обнаружение и определение положения дронов в любых сценариях',
+                category: 'portable',
+                categoryLabel: 'Портативный / Тактический',
+                funcType: 'detect_only',
+                isFpv: true,
+                detectRange: '≥10 км (серийные), ≥2 км (FPV)',
+                jamRange: 'Не предусмотрено (позиционирование дрона и пилота)',
+                description: 'Полнодиапазонное обнаружение, позиционирование дрона и пилота, запись FPV-видео. Патрули, охрана объектов, расследования.',
+                features: ['4 режима обнаружения и анализа', 'Запись FPV-видео в реальном времени', 'Оповещение на несколько устройств', 'Опознание и позиционирование на дальности 12 км и более', '5 вариантов использования'],
+                specs: [
+                    ['Обнаруживаемые цели', 'DJI, Autel, Haboson, FPV, самодельные дроны'],
+                    ['Диапазон и дальность', '70 МГц – 6,2 ГГц; серийные ≥10 км, FPV ≥2 км'],
+                    ['Позиционирование', 'DID ≥10 км, RID ≥3 км; точность ≤5 м'],
+                    ['Перехват FPV-видео', 'Радиус ≥1,5 км при прямой видимости'],
+                    ['Питание, вес и размер', 'Автономность ≥6 ч (литиевая АКБ); ≤8,5 кг; 283×114×380 мм']
+                ]
+            },
+            {
+                id: 'KAZ-17(P)',
+                name: 'KAZ-17(P) Ручное устройство обнаружения и подавления (6/8 полос)',
+                category: 'portable',
+                categoryLabel: 'Ручное антидроновое устройство',
+                funcType: 'detect_jam',
+                isFpv: true,
+                detectRange: '≥2 км',
+                jamRange: '≥2 км',
+                description: 'Обнаружение и подавление малых, низких и медленных дронов; работа 24/7, связка «1+N».',
+                features: ['Приоритетное обнаружение', 'Сильное подавление FPV', 'Работа 24/7', 'Подавление на 2 км', 'Связка «1+N»'],
+                specs: [
+                    ['Обнаружение', '2,4 и 5,8 ГГц (расширяемо), ≥2 км'],
+                    ['Подавление', '800/900 МГц, 1,2; 1,4; 1,5; 2,4; 5,8 ГГц (6 полос), + 5,2 ГГц (8 полос); ≥2 км'],
+                    ['Автономность', '≥24 ч'],
+                    ['Вес и габариты', '≤8,5 кг; 776×105×304 мм']
+                ]
+            },
+            {
+                id: 'KAZ-20(P)',
+                name: 'KAZ-20(P) Ручное устройство подавления (6/8 полос)',
+                category: 'portable',
+                categoryLabel: 'Ручное антидроновое устройство',
+                funcType: 'jam_only',
+                isFpv: true,
+                detectRange: 'Не предусмотрено (только подавление)',
+                jamRange: '≥2 км',
+                description: 'Подавление с лучшей дальностью: нарушает управление, видео и навигацию малых дронов.',
+                features: ['Работа 24/7', 'Подавление на 2 км', 'Сильное подавление FPV', 'Непрерывное подавление', 'Связка «1+N»'],
+                specs: [
+                    ['Полосы подавления', '800/900 МГц, 1,2; 1,4; 1,5; 2,4; 5,8 ГГц (6 полос) или 8 полос'],
+                    ['Дальность подавления', '≥2 км'],
+                    ['Автономность', '≥24 ч, два аккумулятора'],
+                    ['Условия, вес и размер', '−40…+60 °C; ≤7 кг; 776×105×304 мм']
+                ]
+            },
+            {
+                id: 'KAZ-21',
+                name: 'KAZ-21 Лёгкое устройство подавления дронов',
+                category: 'portable',
+                categoryLabel: 'Портативный / Носимый',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (только подавление)',
+                jamRange: '≥1 км',
+                description: 'Лёгкое носимое устройство, запуск одним нажатием; подавление дронов в пределах прямой видимости.',
+                features: ['Автономность до 24 ч', 'Хорошее соотношение цены и качества', 'Подавление до 1 км', 'Запуск одним нажатием', 'Вес 2 кг'],
+                specs: [
+                    ['Полосы подавления', '1550–1620, 2400–2500, 5150–5250, 5700–5900 МГц'],
+                    ['Дальность подавления', '≥1 км'],
+                    ['Автономность', 'До 24 ч, два встроенных аккумулятора'],
+                    ['Условия, вес и размер', '−40…+60 °C; ≤2 кг; 355×60×255 мм']
+                ]
+            },
+            {
+                id: 'KAZ-34',
+                name: 'KAZ-34 Ранцевое средство противодействия дронам',
+                category: 'portable',
+                categoryLabel: 'Ранцевый комплекс РЭБ',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (только подавление)',
+                jamRange: 'В пределах прямой видимости (8 полос по 50 Вт)',
+                description: 'Отгон и принудительная посадка дронов в зоне видимости; для спецподразделений, охраны и мероприятий.',
+                features: ['Многоканальное противодействие', 'Внешние всенаправленная и ручная направленная антенны', 'Схема плавного пуска', 'Ранцевая конструкция'],
+                specs: [
+                    ['Полосы подавления (8)', '430–440, 855–935, 1150–1300, 1370–1450, 1550–1636, 2400–2500, 5135–5350, 5712–5920 МГц'],
+                    ['Выходная мощность', '50 Вт на полосу'],
+                    ['Комплект и габариты', '23,8 кг; рюкзак 415×190×483 мм'],
+                    ['Батарея', '4,15 кг; работа 40–60 мин; зарядка 29,4 В']
+                ]
+            },
+            {
+                id: 'DF-01',
+                name: 'DF-01 Ручной детектор',
+                category: 'portable',
+                categoryLabel: 'Портативный детектор',
+                funcType: 'detect_only',
+                isFpv: false,
+                detectRange: '1,5–2 км (город), 2–3 км (открытая местность)',
+                jamRange: 'Не предусмотрено (только обнаружение)',
+                description: 'Радиоспектр, Drone ID и Remote ID; положения дронов и пилотов, чёрные и белые списки, облачное обновление.',
+                features: ['Облачное обновление', 'Диапазон 100–6000 МГц', 'Экран 6" с положением дронов и пилотов', 'Ремень или ручное ношение'],
+                specs: [
+                    ['Диапазон и дальность', '100–6000 МГц; 1,5–2 км (город), 2–3 км (открытая местность)'],
+                    ['Цели и реакция', '≥10 одновременно; время реакции <6 с'],
+                    ['Экран и питание', 'Сенсорный экран 6"; 3–4 ч работы; Type-C PD3.0'],
+                    ['Условия, вес и размер', 'IP67, −20…+50 °C; ≤650 г; 172×81×33 мм']
+                ]
+            },
+            {
+                id: 'DF-02',
+                name: 'DF-02 Ручной детектор',
+                category: 'portable',
+                categoryLabel: 'Портативный детектор',
+                funcType: 'detect_only',
+                isFpv: true,
+                detectRange: '≥2 км',
+                jamRange: 'Не предусмотрено (только обнаружение)',
+                description: 'Библиотека моделей: DJI, Autel, HUBSAN, Xiaomi, Skydroid, FPV и др. Обновление прошивки.',
+                features: ['Полная библиотека моделей', 'Обновление прошивки', 'Диапазон 300–6200 МГц', 'Одна внешняя антенна'],
+                specs: [
+                    ['Диапазон и дальность', '300–6200 МГц (настраивается); радиус ≥2 км; реакция ≤3 с'],
+                    ['Питание', 'Два аккумулятора по 3500 мА·ч (заменяемые); работа ≤5 ч по каталогу'],
+                    ['Экран и запуск', 'Экран 1,77"; быстрый запуск за 3 с'],
+                    ['Условия и габариты', '−20…+55 °C; 129×62×55 мм']
+                ]
+            },
+
+            // --- КАТЕГОРИЯ 4: НАПРАВЛЕННЫЕ ПОДАВИТЕЛИ И СПУФЕРЫ (5 моделей) ---
+            {
+                id: 'KAZ-06',
+                name: 'KAZ-06 Стационарное устройство навигационного спуфинга',
+                category: 'directional',
+                categoryLabel: 'Навигационный спуфер',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (только спуфинг)',
+                jamRange: 'Радиус защиты ≥1 км (настраивается)',
+                description: 'Воспроизводит ложные спутниковые сигналы минимум в двух диапазонах: направленный отгон дронов (8 направлений) и запрет входа в зону.',
+                features: ['Ложные сигналы в реальном времени', 'Расширение функций', 'Работа без оператора', 'Создание зоны защиты', 'Малое влияние на среду'],
+                specs: [
+                    ['Навигационные диапазоны', 'GPS L1/L2/L5, ГЛОНАСС L1, BDS B1I, Galileo E1'],
+                    ['Быстродействие и цели', 'Время включения <10 с; одновременно ≥10 дронов'],
+                    ['Радиус защиты', '≥1 км (настраивается)'],
+                    ['Питание и условия', 'AC 220 В / 50 Гц; IP66, −40…+60 °C'],
+                    ['Вес и габариты', '≤11 кг; 351×150×355 мм']
+                ]
+            },
+            {
+                id: 'KAZ-39',
+                name: 'KAZ-39 Направленное щитовое устройство (7 каналов)',
+                category: 'directional',
+                categoryLabel: 'Направленный подавитель / Спуфер',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (только подавление)',
+                jamRange: '1–3 км (ложные сигналы 1–30 км)',
+                description: 'Блокирует сигналы пульта и видеосвязи на 1,5; 2,4 и 5,8 ГГц; обрывает GPS. Настраиваемые частоты.',
+                features: ['7-канальное щитовое устройство', 'Сильное блокирование сигналов', 'Независимый модуль каждого канала', 'Настраиваемые частоты'],
+                specs: [
+                    ['Навигационные системы', 'GPS L1/L2/L5, ГЛОНАСС L1/L2, BDS B1/B2, Galileo E1, QZSS L1'],
+                    ['Радиус воздействия', 'Ложные сигналы 1–30 км; навигационное подавление 1–3 км'],
+                    ['Время реакции', '≤10 с'],
+                    ['Условия и габариты', 'IP66, −40…+70 °C; 388×388×214 мм']
+                ]
+            },
+            {
+                id: 'DF-03',
+                name: 'DF-03 Направленный подавитель с гимбалом',
+                category: 'directional',
+                categoryLabel: 'Направленный подавитель',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (только подавление)',
+                jamRange: '≥5 км',
+                description: 'Возврат, посадка или зависание дрона; следование за целью 360° вместе с оборудованием обнаружения.',
+                features: ['Работает по бытовым и промышленным дронам', 'Следование гимбала за целью 360°', 'Радиус подавления ≥5 км', 'Стабильное подавление'],
+                specs: [
+                    ['Рабочие частоты', '400, 800, 900 МГц, 1,2; 1,4; 1,5; 2,4; 5,2; 5,8 ГГц'],
+                    ['Дальность и реакция', 'Радиус 5 км; реакция 3 с'],
+                    ['Диаграмма антенны', 'Гориз. 30–50°, верт. 50–80°'],
+                    ['Потребление, защита, размер', '≤600 Вт; IP66; 470×250×700 мм']
+                ]
+            },
+            {
+                id: 'DF-08',
+                name: 'DF-08 Навигационный спуфер',
+                category: 'directional',
+                categoryLabel: 'Навигационный спуфер',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (только спуфинг)',
+                jamRange: 'Навигационное подавление 1–3 км; ложные сигналы 1–30 км',
+                description: 'Ложные сигналы отгоняют дроны, запрещают вход и взлёт в зоне; связь с радаром, радиодетектором и радиоподавителем.',
+                features: ['Направленное выдворение, запрет входа и полётов, навигационное подавление, удержание в точке', 'Дальность до 30 км', 'Все навигационные системы', 'Связь с радаром, радиодетектором и подавителем'],
+                specs: [
+                    ['Навигационные системы', 'GPS L1/L2/L5, ГЛОНАСС L1/L2, BDS B1/B2, Galileo E1, QZSS L1'],
+                    ['Радиус воздействия', 'Ложные сигналы 1–30 км; подавление 1–3 км'],
+                    ['Время реакции', '≤10 с'],
+                    ['Условия и габариты', 'IP66, −40…+70 °C; 388×388×214 мм']
+                ]
+            },
+            {
+                id: 'DF-09',
+                name: 'DF-09 Навигационный спуфер',
+                category: 'directional',
+                categoryLabel: 'Навигационный спуфер',
+                funcType: 'jam_only',
+                isFpv: false,
+                detectRange: 'Не предусмотрено (только спуфинг)',
+                jamRange: 'Навигационное подавление 100–500 м; ложные сигналы 1–5 км',
+                description: 'Работает ночью, в дождь, снег и туман; автоматическая связь с радаром, радиодетектором и радиоподавителем.',
+                features: ['Направленное выдворение, запрет входа и полётов, удержание в точке', 'Связь с радаром, радиодетектором и подавителем', 'Все навигационные системы', 'Работа ночью, в дождь, снег и туман'],
+                specs: [
+                    ['Навигационные системы', 'GPS L1/L2/L5, ГЛОНАСС L1/L2, BDS B1/B2, Galileo E1, QZSS L1'],
+                    ['Радиус воздействия', 'Ложные сигналы 1–5 км; подавление 100–500 м'],
+                    ['Время реакции', '≤10 с'],
+                    ['Условия и габариты', 'IP66, −40…+70 °C; 388×388×214 мм']
+                ]
+            },
+
+            // --- КАТЕГОРИЯ 5: КАМЕРЫ НАБЛЮДЕНИЯ СЕРИИ DD-E (5 моделей) ---
+            {
+                id: 'DD-E1',
+                name: 'DD-E1 Камера наблюдения',
+                category: 'optical',
+                categoryLabel: 'Оптико-тепловизионная система',
+                funcType: 'detect_only',
+                isFpv: false,
+                detectRange: 'Распознавание ≥21 000 м / ≥11 000 м; дальномер до 25 км',
+                jamRange: 'Не предусмотрено (оптико-тепловизионный контроль)',
+                description: 'Тепловизор и видимый канал; обнаружение огня и дыма; опционально лазерный дальномер и BeiDou/GPS.',
+                features: ['Обнаружение огня и дыма', 'Оптика 180–1100 мм', 'Тепловизоры 75–300 мм', 'Опционально дальномер, BeiDou/GPS'],
+                specs: [
+                    ['Тепловизор', 'VOx 640×512 / 1280×1024, 12 мкм; 21–230 / 31–155 мм'],
+                    ['Видимый канал', '11–860 / 8–500 мм, 2688×1520, 50 кадр/с'],
+                    ['Дальность распознавания', '≥21 000 / ≥11 000 м; лазерный дальномер до 25 км (опция)'],
+                    ['Опорно-поворотное устр.', 'Поворот 360°, наклон ±45°, точность ±0,1°'],
+                    ['Предустановки и защита', '3000 предустановок; IP66']
+                ]
+            },
+            {
+                id: 'DD-E2',
+                name: 'DD-E2 Камера для противодействия дронам',
+                category: 'optical',
+                categoryLabel: 'Оптико-тепловизионная система',
+                funcType: 'detect_only',
+                isFpv: false,
+                detectRange: 'Автосопровождение (модели HP-DMS10 / HP-DMS15)',
+                jamRange: 'Активное отпугивание (динамик и вспышки)',
+                description: 'Автосопровождение, гиростабилизация; громкоговоритель и вспышки для отпугивания.',
+                features: ['Поддержка масштабной шкалы, лазерного дальномера и подключения нескольких датчиков', 'Азимут 360°, наклон ±90°', 'Активная защита: динамик и вспышки', 'Скорость до 100°/с'],
+                specs: [
+                    ['Модификации', 'Модели HP-DMS10 / HP-DMS15'],
+                    ['Тепловизор', 'VOx 640×512, 12 мкм; 25–100 мм'],
+                    ['Видимый канал', '6,6–320 мм, 1920×1080 / 2688×1520'],
+                    ['Поворот и скорость', 'Поворот 360°, наклон ±90°; ≥100°/с и ≥80°/с'],
+                    ['Условия и вес', 'IP67, −40…+60 °C; ≤10 / ≤12 кг']
+                ]
+            },
+            {
+                id: 'DD-E3',
+                name: 'DD-E3 Система наблюдения',
+                category: 'optical',
+                categoryLabel: 'Оптико-тепловизионная система',
+                funcType: 'detect_only',
+                isFpv: false,
+                detectRange: 'Распознавание ≥11 000 м / ≥8 600 м',
+                jamRange: 'Не предусмотрено (оптико-тепловизионный контроль)',
+                description: 'Тепловизор VOx или охлаждаемый MCT, лазерный дальномер, двухосная двухрамная стабилизированная платформа.',
+                features: ['Длиннофокусные камеры, дальномеры', 'Охлаждаемые тепловизоры', 'Опционально: зелёный предупредительный свет, позиционирование и навигация, электронный компас', 'Скорость до 120°/с'],
+                specs: [
+                    ['Тепловизор', 'VOx 31–155 мм или охлаждаемый MCT 25–500 мм, 640×512'],
+                    ['Видимый канал', '7–300 / 25–500 мм, 50 кадр/с'],
+                    ['Поворот и точность', 'Поворот 360°, наклон −30…+60°; до 120°/с; точность ≤0,01°; стабильность 0,5 мрад'],
+                    ['Вес и габариты', '≤42 кг; 420×358×540 мм; IP66']
+                ]
+            },
+            {
+                id: 'DD-E5',
+                name: 'DD-E5 Система наблюдения',
+                category: 'optical',
+                categoryLabel: 'Оптико-тепловизионная система',
+                funcType: 'detect_only',
+                isFpv: false,
+                detectRange: 'Сверхдлиннофокусная оптика до 1100 мм + связка с радаром',
+                jamRange: 'Не предусмотрено (оптико-тепловизионный контроль)',
+                description: 'Видимый канал до 1000 мм и охлаждаемый тепловизор до 1100 мм; тревоги, автосопровождение, связка с радаром.',
+                features: ['Видимый канал до 1000 мм, тепловизор до 1100 мм', 'Скорость вращения более 80°/с', 'Тревоги по зоне и пересечению границы', 'Автосопровождение и связка с радаром'],
+                specs: [
+                    ['Тепловизор', 'VOx / MCT 640×512 (1280×1024 опц.), до 1100 мм'],
+                    ['Видимый канал', '8–1050 мм, разрешение до 2688×1520'],
+                    ['Поворот и точность', 'Поворот 360°, наклон ±90°; ≥80°/с и ≥60°/с; точность ≤0,005°'],
+                    ['Вес и габариты', '110 кг; Φ565×H880 мм; IP66']
+                ]
+            },
+            {
+                id: 'DD-E7',
+                name: 'DD-E7 Система наблюдения',
+                category: 'optical',
+                categoryLabel: 'Оптико-тепловизионная система',
+                funcType: 'detect_only',
+                isFpv: false,
+                detectRange: 'Лазерный дальномер 10 км',
+                jamRange: 'Не предусмотрено (оптико-тепловизионный контроль)',
+                description: 'Охлаждаемый тепловизор, видимая камера и лазерный дальномер; гиростабилизация.',
+                features: ['Длиннофокусные камеры, дальномер', 'Охлаждаемый тепловизор', 'Азимут 0–360°, наклон −10…+90°', 'Скорость до 120°/с'],
+                specs: [
+                    ['Тепловизор', 'Охлаждаемый MCT 1280×1024, 12 мкм; 72–900 мм'],
+                    ['Видимый канал', '16,5–1000 мм, 4 Мп'],
+                    ['Лазерный дальномер', '1570 нм, дальность 10 км, точность ±3 м'],
+                    ['Поворот и габариты', 'Поворот 360°, наклон −10…+90°; до 120°/с; ≤150 кг; Φ850×H700 мм; IP67']
+                ]
+            }
+        ];
+
+        // =========================================================================
+        // РЕНДЕРИНГ И ФИЛЬТРАЦИЯ КАТАЛОГА
+        // =========================================================================
+        let activeCategory = 'all';
+        let activeFunction = 'all';
+        let searchQuery = '';
+        let selectedSpecItems = []; // Массив ID моделей в спецификации КП
+
+        const catalogGrid = document.getElementById('catalog-grid');
+        const catalogEmpty = document.getElementById('catalog-empty');
+        const visibleCountEl = document.getElementById('catalog-visible-count');
+
+        function renderCatalog() {
+            const filtered = equipmentCatalog.filter(item => {
+                const matchCat = activeCategory === 'all' || item.category === activeCategory;
+                let matchFunc = true;
+                if (activeFunction === 'fpv') {
+                    matchFunc = item.isFpv === true;
+                } else if (activeFunction !== 'all') {
+                    matchFunc = item.funcType === activeFunction;
+                }
+
+                const q = searchQuery.trim().toLowerCase();
+                const matchSearch = !q || 
+                    item.id.toLowerCase().includes(q) ||
+                    item.name.toLowerCase().includes(q) ||
+                    item.description.toLowerCase().includes(q) ||
+                    item.specs.some(s => s[0].toLowerCase().includes(q) || s[1].toLowerCase().includes(q));
+
+                return matchCat && matchFunc && matchSearch;
+            });
+
+            visibleCountEl.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                catalogGrid.innerHTML = '';
+                catalogEmpty.classList.remove('hidden');
+                return;
+            }
+            catalogEmpty.classList.add('hidden');
+
+            catalogGrid.innerHTML = filtered.map(item => {
+                const isAdded = selectedSpecItems.includes(item.id);
+                // Цвет акцента в зависимости от серии
+                let badgeColor = 'bg-kmk-cyan/15 text-kmk-cyan border-kmk-cyan/30';
+                if (item.id.startsWith('DF-')) badgeColor = 'bg-kmk-amber/15 text-kmk-amber border-kmk-amber/30';
+                if (item.id.startsWith('DD-')) badgeColor = 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+
+                return `
+                <div class="hud-box bg-kmk-card border border-slate-800 hover:border-kmk-cyan/60 rounded-xl p-5 flex flex-col justify-between transition-all">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="font-mono text-[10px] px-2.5 py-1 rounded border ${badgeColor} uppercase">
+                                ${item.categoryLabel}
+                            </span>
+                            ${item.isFpv ? '<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-red-500/15 text-red-400 border border-red-500/30">FPV</span>' : ''}
+                        </div>
+
+                        <h3 class="text-base sm:text-lg font-bold text-white leading-snug mb-2">
+                            ${item.name}
+                        </h3>
+
+                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                            ${item.description}
+                        </p>
+
+                        <!-- Ключевые показатели -->
+                        <div class="space-y-2 bg-kmk-bg/90 border border-slate-800/90 rounded-lg p-3 mb-4 font-mono text-xs">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] text-slate-500 uppercase">Дальность обнаружения:</span>
+                                <span class="text-kmk-cyan font-semibold">${item.detectRange}</span>
+                            </div>
+                            <div class="flex flex-col pt-1.5 border-t border-slate-800/70">
+                                <span class="text-[10px] text-slate-500 uppercase">Дальность подавления:</span>
+                                <span class="text-kmk-amber font-semibold">${item.jamRange}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кнопки карточки -->
+                    <div class="flex items-center gap-2.5 pt-2">
+                        <button onclick="openTtxModal('${item.id}')" class="flex-1 py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs uppercase tracking-wider transition-all">
+                            Полные ТТХ
+                        </button>
+                        <button onclick="toggleSpecItem('${item.id}')" class="py-2.5 px-3.5 rounded-lg border text-xs font-mono font-bold transition-all flex items-center gap-1.5 ${
+                            isAdded 
+                            ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' 
+                            : 'bg-kmk-cyan/10 border-kmk-cyan/50 text-kmk-cyan hover:bg-kmk-cyan hover:text-kmk-bg'
+                        }">
+                            <i data-lucide="${isAdded ? 'check' : 'plus'}" class="w-4 h-4"></i>
+                            <span>${isAdded ? 'В КП' : 'В КП'}</span>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // Обработчики вкладок категорий
+        document.querySelectorAll('.cat-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-tab').forEach(b => {
+                    b.classList.remove('bg-kmk-cyan', 'text-kmk-bg', 'font-bold');
+                    b.classList.add('bg-kmk-bg', 'border', 'border-slate-800', 'text-slate-300');
+                });
+                btn.classList.add('bg-kmk-cyan', 'text-kmk-bg', 'font-bold');
+                btn.classList.remove('bg-kmk-bg', 'border', 'border-slate-800', 'text-slate-300');
+
+                activeCategory = btn.getAttribute('data-cat');
+                renderCatalog();
+            });
+        });
+
+        // Поиск и фильтр по функциям
+        document.getElementById('catalog-search').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderCatalog();
+        });
+
+        document.getElementById('function-filter').addEventListener('change', (e) => {
+            activeFunction = e.target.value;
+            renderCatalog();
+        });
+
+        document.getElementById('btn-reset-filters').addEventListener('click', () => {
+            activeCategory = 'all';
+            activeFunction = 'all';
+            searchQuery = '';
+            document.getElementById('catalog-search').value = '';
+            document.getElementById('function-filter').value = 'all';
+
+            document.querySelectorAll('.cat-tab').forEach((b, idx) => {
+                if (idx === 0) {
+                    b.classList.add('bg-kmk-cyan', 'text-kmk-bg', 'font-bold');
+                    b.classList.remove('bg-kmk-bg', 'border', 'border-slate-800', 'text-slate-300');
+                } else {
+                    b.classList.remove('bg-kmk-cyan', 'text-kmk-bg', 'font-bold');
+                    b.classList.add('bg-kmk-bg', 'border', 'border-slate-800', 'text-slate-300');
+                }
+            });
+            renderCatalog();
+        });
+
+        // =========================================================================
+        // МОДАЛЬНОЕ ОКНО ПОДРОБНЫХ ТТХ
+        // =========================================================================
+        const ttxModal = document.getElementById('ttx-modal');
+
+        function openTtxModal(modelId) {
+            const item = equipmentCatalog.find(i => i.id === modelId);
+            if (!item) return;
+
+            document.getElementById('ttx-modal-cat').textContent = item.categoryLabel;
+            document.getElementById('ttx-modal-code').textContent = `МОДЕЛЬ: ${item.id}`;
+            document.getElementById('ttx-modal-title').textContent = item.name;
+            document.getElementById('ttx-modal-desc').textContent = item.description;
+            document.getElementById('ttx-modal-detect').textContent = item.detectRange;
+            document.getElementById('ttx-modal-jam').textContent = item.jamRange;
+
+            document.getElementById('ttx-modal-features').innerHTML = item.features.map(f => `
+                <span class="px-2.5 py-1 rounded bg-slate-800/90 border border-slate-700 text-xs text-slate-200">
+                    ✓ ${f}
+                </span>
+            `).join('');
+
+            document.getElementById('ttx-modal-specs').innerHTML = item.specs.map(([key, val]) => `
+                <div class="flex flex-col sm:flex-row sm:justify-between py-1.5 border-b border-slate-800/70 gap-1">
+                    <span class="text-slate-400">${key}:</span>
+                    <span class="text-white font-semibold sm:text-right">${val}</span>
+                </div>
+            `).join('');
+
+            const addBtn = document.getElementById('ttx-modal-add-btn');
+            const isAdded = selectedSpecItems.includes(item.id);
+            addBtn.innerHTML = isAdded 
+                ? `<i data-lucide="check" class="w-4 h-4"></i><span>Уже добавлено в спецификацию</span>`
+                : `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>Добавить в спецификацию КП</span>`;
+            
+            addBtn.onclick = () => {
+                if (!selectedSpecItems.includes(item.id)) {
+                    toggleSpecItem(item.id);
+                }
+                closeTtxModal();
+                openSpecDrawer();
+            };
+
+            ttxModal.classList.remove('hidden');
+            ttxModal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeTtxModal() {
+            ttxModal.classList.add('hidden');
+            ttxModal.classList.remove('flex');
+        }
+
+        ttxModal.addEventListener('click', (e) => {
+            if (e.target === ttxModal) closeTtxModal();
+        });
+
+        // =========================================================================
+        // КОНФИГУРАТОР СПЕЦИФИКАЦИИ ДЛЯ КП (DRAWER + СИНХРОНИЗАЦИЯ С ФОРМОЙ)
+        // =========================================================================
+        function toggleSpecItem(modelId) {
+            const idx = selectedSpecItems.indexOf(modelId);
+            if (idx === -1) {
+                selectedSpecItems.push(modelId);
+            } else {
+                selectedSpecItems.splice(idx, 1);
+            }
+            updateSpecUI();
+            renderCatalog();
+        }
+
+        function clearSpecification() {
+            selectedSpecItems = [];
+            updateSpecUI();
+            renderCatalog();
+        }
+
+        function updateSpecUI() {
+            const count = selectedSpecItems.length;
+            document.getElementById('spec-badge-count').textContent = count;
+            document.getElementById('form-spec-count').textContent = count;
+
+            const drawerContainer = document.getElementById('drawer-items-container');
+            const formListContainer = document.getElementById('form-spec-list');
+
+            if (count === 0) {
+                drawerContainer.innerHTML = `
+                    <div class="text-center py-12 text-slate-500 text-sm">
+                        Спецификация пуста.<br>Добавьте интересующие модели из каталога оборудования.
+                    </div>
+                `;
+                formListContainer.innerHTML = `
+                    <div class="text-slate-500 py-2">Список пуст. Вы можете добавить модели из каталога выше.</div>
+                `;
+                return;
+            }
+
+            const itemsHtml = selectedSpecItems.map(id => {
+                const item = equipmentCatalog.find(i => i.id === id);
+                return `
+                    <div class="flex items-center justify-between gap-2 bg-kmk-bg border border-slate-800 p-3 rounded-lg">
+                        <div>
+                            <div class="font-mono text-xs font-bold text-kmk-cyan">${item.id}</div>
+                            <div class="text-xs text-slate-300 line-clamp-1">${item.name}</div>
+                        </div>
+                        <button type="button" onclick="toggleSpecItem('${item.id}')" class="text-slate-500 hover:text-red-400 p-1" title="Удалить">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            drawerContainer.innerHTML = itemsHtml;
+            formListContainer.innerHTML = itemsHtml;
+            lucide.createIcons();
+        }
+
+        const specDrawer = document.getElementById('spec-drawer');
+        function openSpecDrawer() {
+            specDrawer.classList.remove('hidden');
+            specDrawer.classList.add('flex');
+        }
+        function closeSpecDrawer() {
+            specDrawer.classList.add('hidden');
+            specDrawer.classList.remove('flex');
+        }
+        specDrawer.addEventListener('click', (e) => {
+            if (e.target === specDrawer) closeSpecDrawer();
+        });
+
+        function proceedToKpForm() {
+            closeSpecDrawer();
+            document.getElementById('request-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Отправка формы запроса КП
+        const kpForm = document.getElementById('kp-request-form');
+        const kpSuccessBox = document.getElementById('kp-success-box');
+        kpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('kp-ticket-id').textContent = `#KMK-${code}`;
+            kpForm.classList.add('hidden');
+            kpSuccessBox.classList.remove('hidden');
+        });
+
+        document.getElementById('btn-new-kp').addEventListener('click', () => {
+            kpForm.reset();
+            kpSuccessBox.classList.add('hidden');
+            kpForm.classList.remove('hidden');
+        });
+
+        // =========================================================================
+        // ИНТЕРАКТИВНЫЙ ТАКТИЧЕСКИЙ РАДАР ПЕРИМЕТРА В HERO-СЕКЦИИ (CANVAS)
+        // =========================================================================
+        const radarCanvas = document.getElementById('perimeterRadarCanvas');
+        const rCtx = radarCanvas.getContext('2d');
+        const radarWrapper = document.getElementById('hero-radar-wrapper');
+
+        let scanAngle = 0;
+        let drones = [
+            { id: 'UAV-01', x: 0.72, y: -0.45, speed: 0.0018, jammed: false, timer: 0 },
+            { id: 'FPV-02', x: -0.68, y: 0.52, speed: 0.0024, jammed: false, timer: 0 }
+        ];
+
+        function resizeHeroRadar() {
+            const rect = radarWrapper.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            radarCanvas.width = rect.width * dpr;
+            radarCanvas.height = rect.height * dpr;
+            rCtx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resizeHeroRadar);
+
+        document.getElementById('btn-test-intrusion').addEventListener('click', () => {
+            if (drones.length >= 6) return;
+            const ang = Math.random() * Math.PI * 2;
+            const num = Math.floor(10 + Math.random() * 89);
+            drones.push({
+                id: `TGT-${num}`,
+                x: Math.cos(ang) * 0.9,
+                y: Math.sin(ang) * 0.9,
+                speed: 0.0021,
+                jammed: false,
+                timer: 0
+            });
+        });
+
+        function animateHeroRadar() {
+            const w = radarWrapper.clientWidth;
+            const h = radarWrapper.clientHeight;
+            const cx = w / 2;
+            const cy = h / 2;
+            const maxR = Math.min(cx, cy) - 8;
+
+            rCtx.clearRect(0, 0, w, h);
+
+            // Фон экрана радара
+            rCtx.beginPath();
+            rCtx.arc(cx, cy, maxR, 0, Math.PI * 2);
+            rCtx.fillStyle = '#070b14';
+            rCtx.fill();
+
+            // Кольца дальности (10 км РТР, 5 км ОЭС, 3 км Подавление KAZ-01P)
+            const rings = [
+                { r: 1.0, color: 'rgba(0, 229, 255, 0.35)', dash: [] },
+                { r: 0.65, color: 'rgba(0, 229, 255, 0.16)', dash: [] },
+                { r: 0.38, color: 'rgba(245, 158, 11, 0.45)', dash: [4, 4] } // Зона подавления 3 км
+            ];
+
+            rings.forEach(ring => {
+                rCtx.beginPath();
+                rCtx.arc(cx, cy, maxR * ring.r, 0, Math.PI * 2);
+                rCtx.strokeStyle = ring.color;
+                rCtx.setLineDash(ring.dash);
+                rCtx.lineWidth = 1.2;
+                rCtx.stroke();
+            });
+            rCtx.setLineDash([]);
+
+            // Оси координат
+            rCtx.strokeStyle = 'rgba(0, 229, 255, 0.12)';
+            rCtx.beginPath();
+            rCtx.moveTo(cx - maxR, cy);
+            rCtx.lineTo(cx + maxR, cy);
+            rCtx.moveTo(cx, cy - maxR);
+            rCtx.lineTo(cx, cy + maxR);
+            rCtx.stroke();
+
+            // Сканирующий луч
+            scanAngle = (scanAngle + 0.025) % (Math.PI * 2);
+            rCtx.save();
+            rCtx.translate(cx, cy);
+            rCtx.rotate(scanAngle);
+
+            rCtx.beginPath();
+            rCtx.moveTo(0, 0);
+            rCtx.arc(0, 0, maxR, -0.45, 0);
+            rCtx.closePath();
+            const grad = rCtx.createLinearGradient(0, 0, maxR, 0);
+            grad.addColorStop(0, 'rgba(0, 229, 255, 0.02)');
+            grad.addColorStop(1, 'rgba(0, 229, 255, 0.25)');
+            rCtx.fillStyle = grad;
+            rCtx.fill();
+
+            rCtx.beginPath();
+            rCtx.moveTo(0, 0);
+            rCtx.lineTo(maxR, 0);
+            rCtx.strokeStyle = '#00e5ff';
+            rCtx.lineWidth = 1.8;
+            rCtx.stroke();
+            rCtx.restore();
+
+            // Охраняемый объект в центре (НПЗ / Месторождение)
+            rCtx.beginPath();
+            rCtx.arc(cx, cy, 5, 0, Math.PI * 2);
+            rCtx.fillStyle = '#00e5ff';
+            rCtx.fill();
+
+            // Движение и перехват целей
+            for (let i = drones.length - 1; i >= 0; i--) {
+                const d = drones[i];
+                const dist = Math.hypot(d.x, d.y);
+
+                if (!d.jammed) {
+                    d.x -= (d.x / dist) * d.speed;
+                    d.y -= (d.y / dist) * d.speed;
+                    // При входе в радиус 3 км (0.38) срабатывает купол KAZ-01P
+                    if (dist <= 0.38) {
+                        d.jammed = true;
+                        d.timer = 90;
+                    }
+                } else {
+                    d.timer--;
+                    d.x += (Math.random() - 0.5) * 0.004;
+                    d.y += (Math.random() - 0.5) * 0.004;
+                    if (d.timer <= 0) {
+                        const ang = Math.random() * Math.PI * 2;
+                        d.x = Math.cos(ang) * 0.92;
+                        d.y = Math.sin(ang) * 0.92;
+                        d.jammed = false;
+                    }
+                }
+
+                const dx = cx + d.x * maxR;
+                const dy = cy + d.y * maxR;
+                const color = d.jammed ? '#00e5ff' : '#f59e0b';
+
+                rCtx.beginPath();
+                rCtx.arc(dx, dy, 4, 0, Math.PI * 2);
+                rCtx.fillStyle = color;
+                rCtx.fill();
+
+                rCtx.font = '9px "JetBrains Mono", monospace';
+                rCtx.fillStyle = color;
+                rCtx.fillText(d.jammed ? `${d.id} [ПОДАВЛЕН]` : d.id, dx + 7, dy + 3);
+            }
+
+            requestAnimationFrame(animateHeroRadar);
+        }
+
+        // Инициализация при загрузке окна
+        window.onload = function () {
+            renderCatalog();
+            updateSpecUI();
+            resizeHeroRadar();
+            animateHeroRadar();
+        };
+    </script>
+</body>
+</html>
